@@ -1,2 +1,9 @@
 # timetoGo
-go
+go learning
+
+**basic grammar**
+
+**mod init**
+
+**runner**
+

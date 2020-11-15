@@ -1,57 +1,25 @@
 package main
 
-import(
+import (
 	"fmt"
+	"time"
 )
-func main()  {
-	fmt.Println("Hello")
-	var x int=20 //定义
-	y :=100 //自动推断类型 用于函数内部
-	if y>100{ 
-		fmt.Println(y)
-	}else if y<=100 {
-		fmt.Println(x)
-	}
-	// switch x {
-	// case x > 0:
-	// 	fmt.Println(x)
-	// case x < 0:
-	// 	fmt.Println(-x)
-	// default: 
-	// 	fmt.Println(0)
-	// }
-	finger :=3
-	switch finger {
-    case 1:
-        fmt.Println("Thumb")
-    case 2:
-        fmt.Println("Index")
-    case 3:
-        fmt.Println("Middle")
-    case 4:
-        fmt.Println("Ring")
-    case 5:
-        fmt.Println("Pinky")
-	default:
-		fmt.Println("sorry")
-	}
 
-	x1 :=2
-	for x1<5{
-		fmt.Println(x1)
-		x1++
-	}
-	for {
-		fmt.Println(x1)
-		x1--
-		if x1==0{
-			break
-		}
-	}
+var ch = make(chan string, 10)
 
+func download(url string) {
+	fmt.Println("start to download", url)
+	time.Sleep(time.Second)
+	ch <- url // 将 url 发送给信道
+}
 
-	x2:=[3]int{100,220,300}
-	for i,n :=range x2{
-		fmt.Println(i,":",n)
+func main() {
+	for i := 0; i < 3; i++ {
+		//	go download("a.com/" + string(i+'0'))
 	}
+	for i := 0; i < 3; i++ {
+		msg := <-ch // 等待信道返回消息。
+		fmt.Println("finish", msg)
+	}
+	fmt.Println("Done!")
 }
