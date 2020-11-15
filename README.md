@@ -1,9 +1,9 @@
-# timetoGo
-go learning
+# Time To Go
+### go learning
 
-**basic grammar**
+basic grammar
 
-**mod init**
+mod init
 
-**runner**
+runner
 
