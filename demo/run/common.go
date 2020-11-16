@@ -1,13 +1,14 @@
 package common
 
 import (
+	"errors"
 	"os"
 	"os/signal"
 	"time"
 )
 
-var ErrTimeOut = errors.new("Over Time")
-var ErrInterrupt = errors.new("Interrupted")
+var ErrTimeOut = errors.New("Over Time") //超时
+var ErrInterrupt = errors.New("Interrupted")
 
 type Runner struct {
 	tasks     []func(int) //切片
@@ -43,7 +44,23 @@ func (r *Runner) run() error {
 		if r.isInterupt() {
 			return ErrInterrupt
 		}
-		task(id)
+		task(id) //run the task
 	}
 	return nil
+}
+
+func (r *Runner) Start() error {
+	//希望接受的信号 os？
+	signal.Notify(r.interrupt, os.Interrupt)
+
+	go func() {
+		r.complete <- r.run()
+	}()
+
+	select {
+	case err := <-r.complete:
+		return err //完成
+	case <-r.interrupt:
+		return ErrTimeOut
+	}
 }
